@@ -1,5 +1,7 @@
 export async function getUsers() {
-  const res = await fetch(`http://localhost:3000/api/users`, {
+
+  const baseUrl = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000";
+  const res = await fetch(`${baseUrl}/api/users`, {
     cache: "no-store",
   });
 
