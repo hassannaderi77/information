@@ -5,22 +5,27 @@ import { FcBusinessman } from "react-icons/fc";
 import { FcBusinesswoman } from "react-icons/fc";
 import { cookies } from "next/headers";
 
+
 async function getUser(id) {
   const cookieStore = await cookies(); // ❌ await نداشته باشد
   const token = cookieStore.get("token")?.value;
 
-  const res = await fetch(`/api/user/${id}`, {
-    cache: "no-store",
-    credentials: "include"
-  });
+  const baseUrl =
+    process.env.VERCEL_URL
+      ? `https://${process.env.VERCEL_URL}`
+      : "http://localhost:3000";
 
-  console.log(" api token:", token );
-  console.log(" param id:", id );
+  const res = await fetch(`${baseUrl}/api/user/${id}`, {
+    cache: "no-store",
+    headers: {
+      Cookie: `token=${token}`, // 🔥 خیلی مهم
+    },
+  });
 
   if (!res.ok) return null;
 
   const data = await res.json();
-  return data.user;
+  return data.user;
 }
 
 export default async function User({ params: paramsPromise }) {
