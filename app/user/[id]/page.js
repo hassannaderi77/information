@@ -10,6 +10,10 @@ async function getUser(id) {
   const cookieStore = cookies(); // ✅ بدون await
   const token = cookieStore.get("token")?.value;
 
+  if(!token) {
+    return null
+  }
+
   const res = await fetch(`/api/user/${id}`, {
     cache: "no-store",
     headers: token ? { Cookie: `token=${token}` } : {},
@@ -35,7 +39,7 @@ export default async function User({ params: paramsPromise }) {
   if(!user) {
     return(
       <div className="text-white text-center mt-20">
-        user is null. check token api
+        user not found or token invalid
       </div>
     )
   }
