@@ -7,22 +7,18 @@ import { cookies } from "next/headers";
 
 
 async function getUser(id) {
-  const cookieStore = await cookies(); // ❌ await نداشته باشد
+  const cookieStore = cookies(); // ✅ بدون await
   const token = cookieStore.get("token")?.value;
 
-  const baseUrl =
-    process.env.VERCEL_URL
-      ? `https://${process.env.VERCEL_URL}`
-      : "http://localhost:3000";
-
-  const res = await fetch(`${baseUrl}/api/user/${id}`, {
+  const res = await fetch(`/api/user/${id}`, {
     cache: "no-store",
-    headers: {
-      Cookie: `token=${token}`, // 🔥 خیلی مهم
-    },
+    headers: token ? { Cookie: `token=${token}` } : {},
   });
 
-  if (!res.ok) return null;
+  if (!res.ok) {
+    console.log("USER API ERROR:", await res.text()); // 🔹 ببین چی برمی‌گرده
+    return null;
+  }
 
   const data = await res.json();
   return data.user;
