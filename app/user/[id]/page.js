@@ -34,7 +34,15 @@ export default async function User({ params: paramsPromise }) {
   const {id} = params;
   const user = await getUser(id);
 
-  if (!user) notFound();
+  // if (!user) notFound();
+
+  if(!user) {
+    return(
+      <div className="text-white text-center mt-20">
+        user is null. check token api
+      </div>
+    )
+  }
 
   
 
