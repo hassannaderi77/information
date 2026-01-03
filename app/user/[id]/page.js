@@ -9,9 +9,7 @@ async function getUser(id) {
   const cookieStore = await cookies(); // ❌ await نداشته باشد
   const token = cookieStore.get("token")?.value;
 
-  const baseUrl = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000";
-
-  const res = await fetch(`${baseUrl}/api/user/${id}`, {
+  const res = await fetch(`/api/user/${id}`, {
     cache: "no-store",
     credentials: "include"
   });
